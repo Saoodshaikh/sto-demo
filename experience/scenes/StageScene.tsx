@@ -1,6 +1,6 @@
 'use client';
 
-import { MeshReflectorMaterial } from '@react-three/drei';
+import { MeshReflectorMaterial, ContactShadows } from '@react-three/drei';
 import LedWall from '../stagecraft/LedWall';
 import Lasers from '../stagecraft/Lasers';
 import Spotlights from '../stagecraft/Spotlights';
@@ -10,8 +10,8 @@ import Waveform from '../stagecraft/Waveform';
 import StarField from '../stagecraft/StarField';
 import Amps from '../stagecraft/Amps';
 import FloatingNotes from '../stagecraft/FloatingNotes';
-import Performer from '../figures/Performer';
-import { STAGE } from '../acts';
+import Performer3D from '../figures/Performer3D';
+import { STAGE, ACT_MAP } from '../acts';
 import type { ActId } from '../audio/AudioEngine';
 
 /**
@@ -53,17 +53,38 @@ export default function StageScene({
       {cfg.amps && <Amps />}
       {cfg.notes && <FloatingNotes count={mobile ? 18 : 30} />}
 
-      {/* Lighting */}
+      {/* Volumetric spotlight cones (per act) */}
       <Spotlights colors={cfg.spots} />
       {cfg.laserRigs > 0 && <Lasers rigs={cfg.laserRigs} />}
 
-      {/* The performance */}
+      {/* Real lighting for the 3D performer */}
+      <ambientLight intensity={0.25} />
+      <hemisphereLight args={['#9fb4ff', '#04060d', 0.4]} />
+      <directionalLight position={[5, 9, 6]} intensity={1.5} color="#ffffff" />
+      <pointLight
+        position={[0, 2.5, -3]}
+        intensity={mobile ? 6 : 9}
+        distance={20}
+        decay={2}
+        color={ACT_MAP[act].accent}
+      />
+
+      {/* The performer + grounding shadow */}
+      <Performer3D act={act} />
+      <ContactShadows
+        position={[0, -3.38, -6]}
+        scale={14}
+        blur={2.6}
+        opacity={0.65}
+        far={7}
+        resolution={mobile ? 256 : 512}
+        color="#000000"
+      />
       <Waveform act={act} scale={cfg.waveScale} />
-      <Performer act={act} booth={cfg.booth} />
 
       {/* Audience + atmosphere */}
       <Crowd count={mobile ? 120 : 260} />
-      <Sparks count={mobile ? 300 : cfg.ledWall ? 900 : 500} />
+      <Sparks count={mobile ? 300 : cfg.ledWall ? 800 : 400} />
     </group>
   );
 }

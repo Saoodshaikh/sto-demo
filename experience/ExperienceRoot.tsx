@@ -2,8 +2,7 @@
 
 import { Suspense, useEffect, useRef, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { EffectComposer, Bloom, Vignette, Noise } from '@react-three/postprocessing';
-import { BlendFunction } from 'postprocessing';
+import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import * as THREE from 'three';
 import { AudioEngine, ActId } from './audio/AudioEngine';
 import { audio } from './audio/reactive';
@@ -111,7 +110,7 @@ export default function ExperienceRoot({
       style={{ position: 'fixed', inset: 0 }}
     >
       <color attach="background" args={['#03040a']} />
-      <fog attach="fog" args={['#04060f', 20, 62]} />
+      <fog attach="fog" args={['#04060f', 22, 68]} />
 
       <Suspense fallback={null}>
         <AudioBridge engine={engine} />
@@ -119,16 +118,16 @@ export default function ExperienceRoot({
         <CameraRig started={started} />
         <StageScene act={act} mobile={mobile} />
 
-        <EffectComposer multisampling={0}>
+        {/* Clean grade — bloom + gentle vignette, NO film noise (reads premium). */}
+        <EffectComposer multisampling={mobile ? 0 : 2}>
           <Bloom
-            intensity={1.5}
-            luminanceThreshold={0.15}
+            intensity={0.9}
+            luminanceThreshold={0.25}
             luminanceSmoothing={0.9}
             mipmapBlur
-            radius={0.8}
+            radius={0.7}
           />
-          <Vignette offset={0.25} darkness={0.95} />
-          <Noise premultiply blendFunction={BlendFunction.SOFT_LIGHT} opacity={0.35} />
+          <Vignette offset={0.3} darkness={0.72} />
         </EffectComposer>
       </Suspense>
     </Canvas>
