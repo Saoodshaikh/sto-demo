@@ -97,46 +97,42 @@ const SCENES: Scene[] = [
   },
 ];
 
+const EASE = [0.22, 1, 0.36, 1] as const;
+
 function SceneStage({ scene, index }: { scene: Scene; index: number }) {
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'end start'],
-  });
-
-  const opacity = useTransform(scrollYProgress, [0, 0.28, 0.72, 1], [0, 1, 1, 0]);
-  const y = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [80, 0, 0, -80]);
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1.08, 1, 1.08]);
-  const blur = useTransform(scrollYProgress, [0, 0.28, 0.72, 1], [10, 0, 0, 10]);
-  const filter = useTransform(blur, (b) => `blur(${b}px)`);
-  // Slow parallax drift of the light source.
-  const glowY = useTransform(scrollYProgress, [0, 1], ['-8%', '8%']);
-
   const last = index === SCENES.length - 1;
   const isOpening = index === 0;
 
   return (
-    <section ref={ref} className="relative h-[150vh]">
+    <section className="relative h-[150vh]">
       <div
         className="sticky top-0 flex h-screen w-full items-center justify-center overflow-hidden"
         style={{ background: scene.bg }}
       >
-        {/* Drifting cinematic light */}
+        {/* Living cinematic light — clearly visible, gently drifting */}
         <motion.div
           aria-hidden
-          className="pointer-events-none absolute left-1/2 h-[80vh] w-[80vh] -translate-x-1/2 rounded-full blur-[120px]"
-          style={{ background: `radial-gradient(circle, ${scene.glow}, transparent 60%)`, top: glowY }}
+          className="pointer-events-none absolute left-1/2 top-[38%] h-[90vh] w-[90vh] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[110px]"
+          style={{ background: `radial-gradient(circle, ${scene.glow}, transparent 62%)` }}
+          animate={{ scale: [1, 1.15, 1], opacity: [0.7, 1, 0.7], x: [0, 40, -30, 0] }}
+          transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        {/* A second accent light for depth */}
+        <motion.div
+          aria-hidden
+          className="pointer-events-none absolute right-[12%] top-[60%] h-[46vh] w-[46vh] rounded-full blur-[100px]"
+          style={{ background: `radial-gradient(circle, ${scene.glow}, transparent 60%)` }}
+          animate={{ x: [0, -50, 20, 0], y: [0, 30, -20, 0] }}
+          transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
         />
 
-        {/* Scene index — subtle film marker */}
+        {/* Scene film marker */}
         <div className="absolute left-8 top-1/2 -translate-y-1/2 font-display text-[11px] tracking-[0.4em] text-white/25">
           {String(index + 1).padStart(2, '0')} / {String(SCENES.length).padStart(2, '0')}
         </div>
 
-        <motion.div
-          style={{ opacity, y, scale, filter }}
-          className="relative z-10 flex max-w-5xl flex-col items-center px-6 text-center"
-        >
+        {/* Content — always visible (no JS-gated opacity, so it can never hide) */}
+        <div className="relative z-10 flex max-w-5xl flex-col items-center px-6 text-center">
           <span
             className="mb-6 text-[11px] font-medium uppercase tracking-[0.45em]"
             style={{ color: scene.accent }}
@@ -155,13 +151,13 @@ function SceneStage({ scene, index }: { scene: Scene; index: number }) {
           </h2>
 
           {scene.sub && (
-            <p className="mt-8 max-w-xl text-base font-light leading-relaxed text-white/60 sm:text-lg">
+            <p className="mt-8 max-w-xl text-base font-light leading-relaxed text-white/65 sm:text-lg">
               {scene.sub}
             </p>
           )}
 
           {last && <CallToAction accent={scene.accent} />}
-        </motion.div>
+        </div>
 
         {isOpening && <ScrollCue />}
       </div>
