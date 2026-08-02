@@ -7,23 +7,6 @@ import { TALENT_TYPES } from '@/lib/content';
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-// Every talent has a live performance on The Stage → deep-link to that act.
-const PERFORMABLE: Record<string, string> = {
-  Singers: 'singer',
-  Musicians: 'musician',
-  Guitarists: 'guitarist',
-  DJs: 'dj',
-  Dancers: 'dancer',
-  Actors: 'actor',
-  Models: 'model',
-  'Content Creators': 'creator',
-  Influencers: 'influencer',
-  Athletes: 'athlete',
-  Anchors: 'anchor',
-  Photographers: 'photographer',
-  Filmmakers: 'filmmaker',
-  Performers: 'performer',
-};
 
 /** Accent-tinted equalizer that animates to imply live energy per talent. */
 function Equalizer({ accent }: { accent: string }) {
@@ -112,19 +95,13 @@ export default function TalentVerticals() {
                 {t.desc}
               </p>
 
-              {PERFORMABLE[t.name] ? (
-                <a
-                  href={`/experience?act=${PERFORMABLE[t.name]}`}
-                  data-hover
-                  className="mt-7 inline-flex items-center gap-2.5 rounded-full bg-white px-6 py-3 text-sm font-medium text-ink transition-transform hover:scale-[1.03]"
-                >
-                  <span className="text-[11px]">▶</span> Watch live performance
-                </a>
-              ) : (
-                <span className="mt-7 inline-flex items-center rounded-full border border-white/12 px-5 py-2.5 text-xs text-white/45">
-                  Live performance coming soon
-                </span>
-              )}
+              <a
+                href="#cta"
+                data-hover
+                className="mt-7 inline-flex items-center gap-2.5 rounded-full bg-white px-6 py-3 text-sm font-medium text-ink transition-transform hover:scale-[1.03]"
+              >
+                Discover {t.name.toLowerCase()} on STC
+              </a>
 
               <div className="mt-10">
                 <Equalizer accent={t.accent} />
@@ -149,15 +126,6 @@ export default function TalentVerticals() {
                 }`}
                 style={on ? { boxShadow: `inset 0 0 0 1px ${item.accent}55` } : undefined}
               >
-                {PERFORMABLE[item.name] && (
-                  <span className="absolute right-3 top-3 flex items-center gap-1 text-[9px] font-semibold uppercase tracking-wider text-white/70">
-                    <span
-                      className="h-1.5 w-1.5 animate-pulse rounded-full"
-                      style={{ background: item.accent }}
-                    />
-                    Live
-                  </span>
-                )}
                 <span
                   className="mb-3 block h-1.5 w-1.5 rounded-full transition-transform duration-300 group-hover:scale-150"
                   style={{

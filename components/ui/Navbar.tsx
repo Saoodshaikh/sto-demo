@@ -5,10 +5,10 @@ import { motion } from 'framer-motion';
 import MagneticButton from './MagneticButton';
 
 const LINKS = [
-  { label: 'The Stage', href: '/experience' },
   { label: 'Talent', href: '#talent' },
   { label: 'Intelligence', href: '#intelligence' },
   { label: 'Ecosystem', href: '#ecosystem' },
+  { label: 'Roadmap', href: '#roadmap' },
   { label: 'Investors', href: '#investors' },
 ];
 

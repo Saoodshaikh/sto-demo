@@ -63,9 +63,9 @@ export default function Hero() {
         animate="show"
         className="mt-11 flex flex-col items-center gap-4 sm:flex-row"
       >
-        <MagneticButton href="/experience">Enter The Stage →</MagneticButton>
-        <MagneticButton href="#vision" variant="ghost">
-          Explore the vision
+        <MagneticButton href="#cta">Request Early Access</MagneticButton>
+        <MagneticButton href="#talent" variant="ghost">
+          Explore talent
         </MagneticButton>
       </motion.div>
 
