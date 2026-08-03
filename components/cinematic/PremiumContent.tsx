@@ -1,13 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import {
-  STATS,
-  INTELLIGENCE,
-  JOURNEYS,
-  ROADMAP,
-  TALENT_TYPES,
-} from '@/lib/content';
+import { STATS, INTELLIGENCE, JOURNEYS, ROADMAP } from '@/lib/content';
 
 /**
  * The substantive STC story, in a premium luxury language: warm near-black
@@ -17,8 +10,12 @@ import {
  */
 
 const GOLD = '#e6c980';
-const EXPO = [0.16, 1, 0.3, 1] as const;
 
+/**
+ * Always-visible wrapper. We deliberately do NOT gate opacity on scroll/motion
+ * (that left content stuck invisible). Content renders at full opacity; a pure
+ * CSS keyframe adds a gentle rise that still ENDS visible even if it never runs.
+ */
 function Reveal({
   children,
   delay = 0,
@@ -29,15 +26,12 @@ function Reveal({
   className?: string;
 }) {
   return (
-    <motion.div
+    <div
       className={className}
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.3 }}
-      transition={{ duration: 0.9, ease: EXPO, delay }}
+      style={{ animation: `rise 0.8s cubic-bezier(0.16,1,0.3,1) ${delay}s both` }}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }
 

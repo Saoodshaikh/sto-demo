@@ -147,6 +147,17 @@ main blockquote {
 
 /* Grain intentionally removed — a clean surface reads far more premium. */
 
+/* Transform-only entrance — content is ALWAYS visible (opacity untouched),
+   it just slides up if the animation runs. Cannot leave anything hidden. */
+@keyframes rise {
+  from {
+    transform: translateY(26px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
