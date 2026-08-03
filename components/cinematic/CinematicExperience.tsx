@@ -1,6 +1,5 @@
 'use client';
 
-import { useRef, useState } from 'react';
 import { motion, useScroll, useTransform, MotionValue } from 'framer-motion';
 
 /**
@@ -80,27 +79,17 @@ const SCENES: Scene[] = [
   {
     id: 'intelligence',
     kicker: 'The Intelligence',
-    title: 'AI that sees what\nthe world missed.',
-    sub: 'STC reads talent at the scale of a nation — and connects it to the world.',
+    title: 'Then AI sees what\nthe world missed.',
+    sub: 'Select Talent Co reads talent at the scale of a nation — and connects it to the world.',
     bg: 'radial-gradient(120% 100% at 50% 30%, #061033 0%, #01030c 70%)',
     glow: 'rgba(79,123,255,0.22)',
     accent: '#6aa8ff',
-  },
-  {
-    id: 'call',
-    kicker: 'Your moment',
-    title: 'Be discovered.',
-    sub: 'Select Talent Co — the operating system for the global talent economy.',
-    bg: 'radial-gradient(120% 100% at 50% 40%, #0a0d1a 0%, #000000 75%)',
-    glow: 'rgba(140,168,255,0.16)',
-    accent: '#a5b8ff',
   },
 ];
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 function SceneStage({ scene, index }: { scene: Scene; index: number }) {
-  const last = index === SCENES.length - 1;
   const isOpening = index === 0;
 
   return (
@@ -155,8 +144,6 @@ function SceneStage({ scene, index }: { scene: Scene; index: number }) {
               {scene.sub}
             </p>
           )}
-
-          {last && <CallToAction accent={scene.accent} />}
         </div>
 
         {isOpening && <ScrollCue />}
@@ -184,42 +171,6 @@ function ScrollCue() {
         />
       </div>
     </motion.div>
-  );
-}
-
-function CallToAction({ accent }: { accent: string }) {
-  const [email, setEmail] = useState('');
-  const [sent, setSent] = useState(false);
-  return (
-    <div className="mt-12 w-full max-w-md">
-      {sent ? (
-        <p className="text-white/80">You’re on the list. We’ll be in touch.</p>
-      ) : (
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (email.includes('@')) setSent(true);
-          }}
-          className="flex flex-col items-center gap-3 sm:flex-row"
-        >
-          <input
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@company.com"
-            className="w-full flex-1 rounded-full border border-white/15 bg-white/[0.05] px-6 py-3.5 text-sm text-white placeholder-white/30 outline-none transition-colors focus:border-white/50"
-          />
-          <button
-            type="submit"
-            className="rounded-full px-7 py-3.5 text-sm font-medium text-black transition-transform hover:scale-[1.03]"
-            style={{ background: accent }}
-          >
-            Request Access
-          </button>
-        </form>
-      )}
-    </div>
   );
 }
 
